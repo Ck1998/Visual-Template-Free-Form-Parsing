@@ -885,7 +885,7 @@ class FormsBoxDetect(BoxDetectDataset):
         #cluster_centers=means
         dH=600
         dW=3000
-        draw = np.zeros([dH,dW,3],dtype=np.float)
+        draw = np.zeros([dH,dW,3],dtype=np.float32)
         toWrite = []
         final_k=k
         for ki in range(k):

@@ -164,10 +164,10 @@ class BoxDetectTrainer(BaseTrainer):
         ##tic=timeit.default_timer()
         batch_idx = (iteration-1) % len(self.data_loader)
         try:
-            thisInstance = self.data_loader_iter.next()
+            thisInstance = next(self.data_loader_iter)
         except StopIteration:
             self.data_loader_iter = iter(self.data_loader)
-            thisInstance = self.data_loader_iter.next()
+            thisInstance = next(self.data_loader_iter)
         if not self.model.predNumNeighbors:
             del thisInstance['num_neighbors']
         ##toc=timeit.default_timer()
@@ -376,8 +376,8 @@ class BoxDetectTrainer(BaseTrainer):
                         if ap_5 is not None:
                             mAP+=ap_5
                             mAP_count+=1
-                        mRecall += np.array(recall_5,dtype=np.float)#/len(outputBoxes)
-                        mPrecision += np.array(prec_5,dtype=np.float)#/len(outputBoxes)
+                        mRecall += np.array(recall_5,dtype=np.float32)#/len(outputBoxes)
+                        mPrecision += np.array(prec_5,dtype=np.float32)#/len(outputBoxes)
                 index=0
                 for name, target in targetLines.items():
                     #print('line')

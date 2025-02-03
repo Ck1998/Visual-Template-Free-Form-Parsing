@@ -91,7 +91,7 @@ with open(outPath,'w') as out:
 
 drawH=1000
 drawW=4000
-draw = np.zeros([drawH,drawW,3],dtype=np.float)
+draw = np.zeros([drawH,drawW,3],dtype=np.float32)
 for anchor in anchors:
     color = np.random.uniform(0.2,1,3).tolist()
     h=anchor['height']

@@ -1,6 +1,6 @@
 {
     "name": "no_vis_pairing",
-    "cuda": false,
+    "cuda": true,
     "gpu": 0,
     "save_mode": "state_dict",
     "override": true,

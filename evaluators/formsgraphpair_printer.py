@@ -341,7 +341,7 @@ def FormsGraphPair_printer(config,instance, model, gpu, metrics, outDir=None, st
                         #    decision = optimizeRelationships(newRelPred,newRelCand,numNeighbors,penalty)
                     #else:
                     decision= optimizeRelationshipsSoft(newRelPred,newRelCand,numNeighbors,penalty, rel_threshold)
-                    decision= torch.from_numpy( np.round_(decision).astype(int) )
+                    decision= torch.from_numpy( np.round(decision).astype(int) )
                     decision=decision.to(relPred.device)
                     relPred[keep] = torch.where(0==decision,relPred[keep]-1,relPred[keep])
                     relPred[~keep] -=1

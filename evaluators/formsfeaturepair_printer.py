@@ -199,7 +199,7 @@ def FormsFeaturePair_printer(config,instance, model, gpu, metrics, outDir=None, 
                     #print('size being optimized soft: {}'.format(newPred.size(0)))
                     #pred[keep] *= torch.from_numpy( optimizeRelationshipsSoft(newPred,numIds,numNeighbors, penalty) ).float()
                     decision= optimizeRelationshipsSoft(newPred,numIds,numNeighbors, penalty)
-                    decision= torch.from_numpy( np.round_(decision).astype(int) )
+                    decision= torch.from_numpy( np.round(decision).astype(int) )
                     pred[keep] = torch.where(0==decision,pred[keep]-2,pred[keep])
                 else:
                     for i in range(keep.size(0)):

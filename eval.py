@@ -29,11 +29,12 @@ from collections import defaultdict
 logging.basicConfig(level=logging.INFO, format='')
 
 
+
 def main(resume,saveDir,numberOfImages,index,gpu=None, shuffle=False, setBatch=None, config=None, thresh=None, addToConfig=None, test=False,verbose=2):
     np.random.seed(1234)
     torch.manual_seed(1234)
     if resume is not None:
-        checkpoint = torch.load(resume, map_location=lambda storage, location: storage)
+        checkpoint = torch.load(resume, map_location=lambda storage, location: storage, weights_only=False)
         print('loaded iteration {}'.format(checkpoint['iteration']))
         if config is None:
             config = checkpoint['config']
@@ -217,7 +218,7 @@ def main(resume,saveDir,numberOfImages,index,gpu=None, shuffle=False, setBatch=N
                         #output = output.cpu().data.numpy()
                         #target = target.data.numpy()
                         #metricsO = _eval_metrics_ind(metrics,output, target)
-                        metricsO,aux = saveFunc(config,valid_iter.next(),model,gpu,metrics,validDir,validIndex)
+                        metricsO,aux = saveFunc(config,next(valid_iter),model,gpu,metrics,validDir,validIndex)
                         if type(metricsO) == dict:
                             for typ,typeLists in metricsO.items():
                                 if type(typeLists) == dict:
@@ -251,7 +252,7 @@ def main(resume,saveDir,numberOfImages,index,gpu=None, shuffle=False, setBatch=N
                 for vi in range(curVI,len(valid_data_loader)):
                     if verbose>1:
                         print('{} batch index: {}\{} (not save)'.format(validName,vi,len(valid_data_loader)),end='\r')
-                    instance = valid_iter.next()
+                    instance = next(valid_iter)
                     metricsO,_ = saveFunc(config,instance,model,gpu,metrics)
                     if type(metricsO) == dict:
                         for typ,typeLists in metricsO.items():
@@ -292,7 +293,7 @@ def main(resume,saveDir,numberOfImages,index,gpu=None, shuffle=False, setBatch=N
             batchIndex = index//batchSize
             inBatchIndex = index%batchSize
             for i in range(batchIndex+1):
-                instance= instances.next()
+                instance= next(instances)
             #data, target = data[inBatchIndex:inBatchIndex+1], target[inBatchIndex:inBatchIndex+1]
             #dataT = _to_tensor(gpu,data)
             #output = model(dataT)
@@ -322,6 +323,7 @@ def main(resume,saveDir,numberOfImages,index,gpu=None, shuffle=False, setBatch=N
 
 if __name__ == '__main__':
     logger = logging.getLogger()
+    # torch.serialization.add_safe_globals([logger])
 
     parser = argparse.ArgumentParser(description='PyTorch Evaluator/Displayer')
     parser.add_argument('-c', '--checkpoint', default=None, type=str,
